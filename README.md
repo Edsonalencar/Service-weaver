@@ -1,37 +1,37 @@
-# GenericService
+# Service Weaver
 
-Uma solução elegante para criar services CRUD completos de forma padronizada e com o mínimo de código.
+An elegant solution to create standardized CRUD services with minimal code.
 
-## Visão Geral
+## Overview
 
-O **GenericService** fornece uma estrutura genérica para implementação de serviços com operações básicas de CRUD para qualquer entidade. Ele segue um padrão de chamadas definido, garantindo consistência nas requisições e eliminando código repetitivo.
+**Service Weaver** provides a generic structure for implementing services with basic CRUD operations for any entity. It follows a defined pattern of calls, ensuring consistency in requests and eliminating repetitive code.
 
-### Características Principais
+### Key Features
 
-- Crie services completos em apenas uma linha de código
-- Flexibilidade para escolher qualquer biblioteca de requisições HTTP (Axios, Fetch, etc.)
-- Personalize facilmente o formato das rotas com resolvers
-- Estenda a classe base para adicionar métodos específicos
-- Configure uma única vez e reutilize em todo o projeto
+- Create complete services in just one line of code
+- Flexibility to choose any HTTP request library (Axios, Fetch, etc.)
+- Easily customize route formats with resolvers
+- Extend the base class to add specific methods
+- Configure once and reuse throughout your project
 
-🚨 **Importante**: O `GenericService` funciona melhor quando o backend segue uma estrutura padronizada de endpoints RESTful.
+🚨 **Important**: `Service Weaver` works best when the backend follows a standardized RESTful endpoints structure.
 
-## Instalação
+## Installation
 
 ```bash
-npm install @edsonalencar/generic-service
+npm install service-weaver
 ```
 
-## Configuração Inicial
+## Initial Configuration
 
-O primeiro passo é configurar o `GenericServiceBuilder` com a sua instância de API:
+The first step is to configure the `ServiceWeaverBuilder` with your API instance. Here we'll use axios as an example, but as mentioned before, the project is agnostic to the HTTP request library:
 
 ```typescript
 // serviceConfig.ts
 import axios from 'axios';
-import { GenericServiceBuilder } from '@edsonalencar/generic-service';
+import { ServiceWeaverBuilder } from 'service-weaver';
 
-// Configurar a API
+// Configure the API
 const api = axios.create({
   baseURL: 'https://api.example.com',
   headers: {
@@ -39,43 +39,43 @@ const api = axios.create({
   },
 });
 
-// Obter a classe GenericService configurada
-export const ConfiguredGenericService = GenericServiceBuilder.build(api);
+// Get the configured Service class
+export const ConfiguredService = ServiceWeaverBuilder.build(api);
 ```
 
-## Uso Básico
+## Basic Usage
 
-Depois de configurar, você pode criar services para qualquer entidade em apenas uma linha:
+After configuration, you can create services for any entity in just one line:
 
 ```typescript
 // userService.ts
-import { ConfiguredGenericService } from './serviceConfig';
+import { ConfiguredService } from './serviceConfig';
 
-export const UserService = new ConfiguredGenericService('/api/users');
+export const UserService = new ConfiguredService('/api/users');
 
 // productService.ts
-import { ConfiguredGenericService } from './serviceConfig';
+import { ConfiguredService } from './serviceConfig';
 
-export const ProductService = new ConfiguredGenericService('/api/products');
+export const ProductService = new ConfiguredService('/api/products');
 ```
 
-Cada service criado já possui os seguintes métodos prontos para uso:
+Each created service already has the following methods ready to use:
 
-| Método   | Parâmetros | Descrição |
-|----------|------------|-----------|
-| `create` | (data, headers?) | Cria um novo recurso |
-| `get` | (queryParams?, headers?) | Obtém uma lista de recursos |
-| `getById` | (id, headers?) | Obtém um recurso específico pelo ID |
-| `update` | (id, data, headers?) | Atualiza um recurso existente |
-| `patch` | (id, data, headers?) | Atualiza parcialmente um recurso |
-| `delete` | (id, headers?) | Remove um recurso |
-| `getPage` | (page, data?, headers?) | Obtém recursos com paginação |
+| Method   | Parameters | Description |
+|----------|------------|-------------|
+| `create` | (data, headers?) | Creates a new resource |
+| `get` | (queryParams?, headers?) | Gets a list of resources |
+| `getById` | (id, headers?) | Gets a specific resource by ID |
+| `update` | (id, data, headers?) | Updates an existing resource |
+| `patch` | (id, data, headers?) | Partially updates a resource |
+| `delete` | (id, headers?) | Removes a resource |
+| `getPage` | (page, data?, headers?) | Gets resources with pagination |
 
-## Métodos Padrões e Rotas Default
+## Standard Methods and Default Routes
 
-Ao instanciar um `GenericService`, é passado o endpoint base, e todos os métodos serão aplicados sobre essa raiz:
+When instantiating a `Service`, the base endpoint is passed, and all methods will be applied on that root:
 
-| Método   | Rota Padrão      | Requisição HTTP |
+| Method   | Default Route    | HTTP Request |
 |----------|-----------------|------------|
 | `create` | `/`             | `POST /api/users` |
 | `get`    | `/`             | `GET /api/users` |
@@ -85,17 +85,17 @@ Ao instanciar um `GenericService`, é passado o endpoint base, e todos os métod
 | `delete` | `/{id}`         | `DELETE /api/users/123` |
 | `getPage`| `/page/{page}`  | `POST /api/users/page/0` |
 
-## Casos de Uso Avançados
+## Advanced Use Cases
 
-### Estendendo o GenericService
+### Extending the Service
 
-Se você precisar adicionar métodos específicos que não seguem o padrão CRUD:
+If you need to add specific methods that don't follow the CRUD pattern:
 
 ```typescript
 // customUserService.ts
-import { ConfiguredGenericService } from './serviceConfig';
+import { ConfiguredService } from './serviceConfig';
 
-class CustomUserService extends ConfiguredGenericService {
+class CustomUserService extends ConfiguredService {
   constructor(url: string) {
     super(url);
   }
@@ -115,16 +115,16 @@ class CustomUserService extends ConfiguredGenericService {
   };
 }
 
-// Criar uma instância do service estendido
+// Create an instance of the extended service
 export const userService = new CustomUserService('/api/users');
 ```
 
-### Personalizando o Resolver
+### Customizing the Resolver
 
-Se o formato das URLs da sua API for diferente do padrão, você pode criar um resolver personalizado:
+If your API's URL format is different from the standard, you can create a custom resolver:
 
 ```typescript
-import { GenericServiceBuilder, IEndpointResolver } from '@edsonalencar/generic-service';
+import { ServiceWeaverBuilder, IEndpointResolver } from 'service-weaver';
 
 class CustomResolver implements IEndpointResolver {
   constructor(private baseURL: string) {}
@@ -154,31 +154,31 @@ class CustomResolver implements IEndpointResolver {
   }
 }
 
-// Criar factory function para o resolver personalizado
+// Create a factory function for the custom resolver
 const customResolverFactory = (url: string) => new CustomResolver(url);
 
-// Criar uma versão configurada do GenericService com o resolver personalizado
-const CustomConfiguredGenericService = GenericServiceBuilder.build(api, customResolverFactory);
+// Create a configured version of the Service with the custom resolver
+const CustomConfiguredService = ServiceWeaverBuilder.build(api, customResolverFactory);
 
-// Usar o serviço com o resolver personalizado
-export const UserService = new CustomConfiguredGenericService('/api/users');
+// Use the service with the custom resolver
+export const UserService = new CustomConfiguredService('/api/users');
 ```
 
-Alternativamente, você pode passar um resolver específico para um service individual:
+Alternatively, you can pass a specific resolver for an individual service:
 
 ```typescript
-import { ConfiguredGenericService } from './serviceConfig';
+import { ConfiguredService } from './serviceConfig';
 
 const customResolver = new CustomResolver('/api/users');
-export const UserService = new ConfiguredGenericService('/api/users', undefined, customResolver);
+export const UserService = new ConfiguredService('/api/users', undefined, customResolver);
 ```
 
-### Utilizando uma API específica para um service
+### Using a Specific API for a Service
 
-Se você precisar usar uma instância de API diferente para um service específico:
+If you need to use a different API instance for a specific service:
 
 ```typescript
-import { ConfiguredGenericService } from './serviceConfig';
+import { ConfiguredService } from './serviceConfig';
 import axios from 'axios';
 
 const specialApi = axios.create({
@@ -188,41 +188,41 @@ const specialApi = axios.create({
   }
 });
 
-export const SpecialService = new ConfiguredGenericService('/special-resource', specialApi);
+export const SpecialService = new ConfiguredService('/special-resource', specialApi);
 ```
 
-## Arquitetura e Componentes
+## Architecture and Components
 
-### GenericServiceBuilder
+### ServiceWeaverBuilder
 
-O `GenericServiceBuilder` permite configurar uma versão personalizada do `GenericService` com seus próprios padrões:
+The `ServiceWeaverBuilder` allows you to configure a customized version of the `Service` with your own standards:
 
 ```typescript
-export class GenericServiceBuilder {
+export class ServiceWeaverBuilder {
   static build(
     api: IApiService,
     customResolverFactory?: (url: string) => IEndpointResolver
-  ): typeof GenericService {
-    // Retorna uma classe configurada
+  ): typeof Service {
+    // Returns a configured class
   }
 }
 ```
 
-### GenericService
+### Service
 
-A classe principal que implementa os métodos CRUD padrão:
+The main class that implements the standard CRUD methods:
 
 ```typescript
-export class GenericService {
+export class Service {
   constructor(
     private url: string,
     api: IApiService,
     resolver?: IEndpointResolver
   ) {
-    // Inicialização
+    // Initialization
   }
 
-  // Métodos CRUD
+  // CRUD methods
   create = async <T, U = unknown>(data: U, headers?: Record<string, string>) => {...}
   get = async <T>(queryParams?: Record<string, string | number>, headers?: Record<string, string>) => {...}
   getById = async <T>(id: number | string, headers?: Record<string, string>) => {...}
@@ -231,7 +231,7 @@ export class GenericService {
   delete = async <T>(id: number | string, headers?: Record<string, string>) => {...}
   getPage = async <T, U = unknown>(page: number, data?: U, headers?: Record<string, string>) => {...}
 
-  // Métodos de utilidade
+  // Utility methods
   getApi = () => this.api;
   getURL = () => this.resolver.getRoot();
 }
@@ -241,7 +241,7 @@ export class GenericService {
 
 #### IApiService
 
-Abstrai o cliente HTTP permitindo flexibilidade na escolha da biblioteca:
+Abstracts the HTTP client allowing flexibility in the choice of library:
 
 ```typescript
 export interface IApiService {
@@ -255,7 +255,7 @@ export interface IApiService {
 
 #### IEndpointResolver
 
-Define como as URLs são construídas:
+Defines how URLs are constructed:
 
 ```typescript
 export interface IEndpointResolver {
@@ -270,7 +270,7 @@ export interface IEndpointResolver {
 
 #### ResponseDTO
 
-Interface para padronização das respostas:
+Interface for standardizing responses:
 
 ```typescript
 export interface ResponseDTO<T> {
@@ -281,7 +281,7 @@ export interface ResponseDTO<T> {
 
 #### Page
 
-Interface para padronização de respostas paginadas:
+Interface for standardizing paginated responses:
 
 ```typescript
 export interface Page<T> {
@@ -300,24 +300,24 @@ export interface Page<T> {
 }
 ```
 
-## Benefícios do GenericService
+## Benefits of Service Weaver
 
-✅ **Padronização**: Todas as entidades seguem um modelo consistente de chamadas à API.  
-✅ **Reutilização**: Reduz significativamente a duplicação de código.  
-✅ **Extensibilidade**: Permite adicionar novos métodos específicos conforme necessário.  
-✅ **Baixo Acoplamento**: Facilita a troca de implementação da API sem impacto nos services.  
-✅ **Flexibilidade**: Compatível com qualquer biblioteca de requisições HTTP.  
-✅ **Personalização**: Adapta-se a diferentes estruturas de API através de resolvers.  
-✅ **Produtividade**: Crie services completos em segundos em vez de minutos.
+✅ **Standardization**: All entities follow a consistent model of API calls.  
+✅ **Reuse**: Significantly reduces code duplication.  
+✅ **Extensibility**: Allows adding new specific methods as needed.  
+✅ **Low Coupling**: Makes it easy to change the API implementation without impacting services.  
+✅ **Flexibility**: Compatible with any HTTP request library.  
+✅ **Customization**: Adapts to different API structures through resolvers.  
+✅ **Productivity**: Create complete services in seconds instead of minutes.
 
-## Contribuição
+## Contribution
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
+Contributions are welcome! Feel free to open issues or submit pull requests.
 
-## Licença
+## License
 
 MIT
 
 ---
 
-Desenvolvido por [Edson Alencar](https://github.com/Edsonalencar)
+Developed by [Edson Alencar](https://github.com/Edsonalencar)
