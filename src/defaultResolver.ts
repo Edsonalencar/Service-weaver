@@ -1,6 +1,6 @@
 import { IEndpointResolver } from "./interface";
 
-export class DefaultEndpointResolver implements IEndpointResolver {
+export class DefaultResolver implements IEndpointResolver {
   constructor(private baseURL: string) {}
 
   getRoot(): string {

@@ -1,0 +1,35 @@
+{
+  "name": "service-weaver",
+  "version": "1.0.0",
+  "description": "Create complete frontend services in a single line of code",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Edsonalencar/GenericService.git"
+  },
+  "keywords": [
+    "api",
+    "service",
+    "generic",
+    "crud",
+    "typescript",
+    "frontend"
+  ],
+  "author": "Edson Alencar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Edsonalencar/GenericService/issues"
+  },
+  "homepage": "https://github.com/Edsonalencar/GenericService#readme",
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
+}
