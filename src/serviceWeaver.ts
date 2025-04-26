@@ -1,7 +1,7 @@
 import { DefaultResolver } from "./defaultResolver";
 import { IApiService, IEndpointResolver, Page, ResponseDTO } from "./interface";
 
-export class GenericService {
+export class ServiceWeaver {
   private resolver: IEndpointResolver;
   private api: IApiService;
 
