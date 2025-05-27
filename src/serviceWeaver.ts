@@ -3,11 +3,11 @@ import { IApiService, IEndpointResolver, Page, ResponseDTO } from "./interface";
 
 export class ServiceWeaver {
   private resolver: IEndpointResolver;
-  private api: IApiService;
+  private api?: IApiService;
 
   constructor(
     private url: string,
-    api: IApiService,
+    api?: IApiService,
     resolver?: IEndpointResolver
   ) {
     this.api = api;
@@ -21,6 +21,8 @@ export class ServiceWeaver {
     data: U,
     headers?: Record<string, string>
   ) => {
+    if (!this.api) throw new Error("API service is not defined");
+
     const res = await this.api.post<ResponseDTO<T>, U>(
       this.resolver.getRoot(),
       data,
@@ -33,6 +35,7 @@ export class ServiceWeaver {
     queryParams?: Record<string, string | number>,
     headers?: Record<string, string>
   ) => {
+    if (!this.api) throw new Error("API service is not defined");
     const res = await this.api.get<ResponseDTO<T>>(
       this.resolver.getRoot(),
       queryParams,
@@ -45,6 +48,7 @@ export class ServiceWeaver {
     id: number | string,
     headers?: Record<string, string>
   ) => {
+    if (!this.api) throw new Error("API service is not defined");
     const res = await this.api.get<ResponseDTO<T>>(
       this.resolver.getById(id),
       undefined,
@@ -58,6 +62,7 @@ export class ServiceWeaver {
     data: U,
     headers?: Record<string, string>
   ) => {
+    if (!this.api) throw new Error("API service is not defined");
     const res = await this.api.put<ResponseDTO<T>, U>(
       this.resolver.update(id),
       data,
@@ -71,6 +76,7 @@ export class ServiceWeaver {
     data: U,
     headers?: Record<string, string>
   ) => {
+    if (!this.api) throw new Error("API service is not defined");
     const res = await this.api.patch<ResponseDTO<T>, U>(
       this.resolver.patch(id),
       data,
@@ -80,6 +86,7 @@ export class ServiceWeaver {
   };
 
   delete = async <T>(id: number | string, headers?: Record<string, string>) => {
+    if (!this.api) throw new Error("API service is not defined");
     const res = await this.api.delete<ResponseDTO<T>>(
       this.resolver.delete(id),
       headers
@@ -92,6 +99,7 @@ export class ServiceWeaver {
     data?: U,
     headers?: Record<string, string>
   ) => {
+    if (!this.api) throw new Error("API service is not defined");
     const res = await this.api.post<ResponseDTO<Page<T>>, U>(
       this.resolver.getPage(page),
       data,
