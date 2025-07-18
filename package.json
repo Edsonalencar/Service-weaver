@@ -1,6 +1,6 @@
 {
   "name": "service-weaver",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Create complete frontend services in a single line of code",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
