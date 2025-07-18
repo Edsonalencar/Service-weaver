@@ -32,7 +32,7 @@ export class ServiceWeaver {
   };
 
   get = async <T>(
-    queryParams?: Record<string, string | number>,
+    queryParams?: Record<string, string | number | undefined>,
     headers?: Record<string, string>
   ) => {
     if (!this.api) throw new Error("API service is not defined");

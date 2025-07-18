@@ -24,7 +24,7 @@ export interface IApiService {
 
   get<T>(
     url: string,
-    queryParams?: Record<string, string | number>,
+    queryParams?: Record<string, string | number | undefined>,
     headers?: Record<string, string>
   ): Promise<T | undefined>;
 }
